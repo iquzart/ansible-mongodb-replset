@@ -1,0 +1,7 @@
+---
+# tasks file for mongodb-replicaset
+
+- include: install.redhat.yml
+- include: configure.redhat.yml
+- include: common.accounts.yml
+- include: final.redhat.yml

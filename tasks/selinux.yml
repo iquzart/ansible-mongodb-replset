@@ -1,0 +1,71 @@
+---
+
+- name: Disable SELinux
+  selinux:
+    state: disabled
+  when: not configure_selinux
+
+- name: Enable SELinux
+  selinux:
+    state: enforcing
+    policy: targeted
+  when: configure_selinux
+
+- name: Install SELinux support packages
+  yum:
+    name:
+      - checkpolicy
+      - policycoreutils-python-utils
+    state: present
+  when: configure_selinux
+
+- name: Copy SELinux custom policy for mongodb_cgroup_memory
+  copy: 
+    src: selinux/mongodb_cgroup_memory.te
+    dest: /tmp/mongodb_cgroup_memory.te
+  when: configure_selinux
+
+- name: Compile SELinux custom policy module
+  command: checkmodule -M -m -o /tmp/mongodb_cgroup_memory.mod /tmp/mongodb_cgroup_memory.te
+  when: configure_selinux
+
+- name: Build SELinux custom policy package
+  command: semodule_package -o /tmp/mongodb_cgroup_memory.pp -m /tmp/mongodb_cgroup_memory.mod
+  when: configure_selinux
+
+- name: Load SELinux custom policy package
+  command: semodule -i /tmp/mongodb_cgroup_memory.pp
+  when: configure_selinux
+
+- name: Configure SELinux for {{ mongodb_conf_db_dir }} and {{ mongodb_conf_log_dir }} directories
+  sefcontext:
+    target: "{{ item.target }}"
+    setype: "{{ item.setype }}"
+    reload: true
+    state: present
+  with_items:
+    - target: "{{ mongodb_conf_db_dir }}(/.*)?"
+      setype: mongod_var_lib_t
+    - target: "{{ mongodb_conf_log_dir }}(/.*)?"
+      setype: mongod_log_t
+  when: configure_selinux
+  notify: mongodb restart
+
+
+- name: Ensure SELinux file contexts are applied
+  shell: restorecon -vr "{{ item }}"
+  with_items:
+    - "{{ mongodb_conf_db_dir }}"
+    - "{{ mongodb_conf_log_dir }}"
+  register: restorecon
+  changed_when: restorecon.stdout != ""
+
+- name: configure SELinux network ports for mongodb
+  seport:
+    ports: "{{ mongodb_conf_port }}"
+    proto: tcp
+    setype: mongod_port_t
+    reload: true
+    state: present
+  notify: mongodb restart
+  when: ansible_selinux and ansible_selinux.status == "enabled"

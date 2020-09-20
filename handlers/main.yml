@@ -1,0 +1,17 @@
+---
+# handlers file for mongodb-replicaset
+
+- name: systemd reload
+  shell: systemctl daemon-reload
+
+- name: mongodb reload
+  service:
+    name: mongod
+    state: reloaded
+    enabled: true
+
+- name: mongodb restart
+  service:
+    name: mongod
+    state: restarted
+    enabled: true

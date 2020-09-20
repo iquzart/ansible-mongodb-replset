@@ -1,0 +1,49 @@
+---
+
+- name: RBAC | create root user "{{ mongodb_root_account}}"
+  mongodb_user:
+    database: admin
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    #update_password: "{{ mongodb_user_update_password }}"
+    roles: "{{ item.roles }}"
+    login_port: "{{ mongodb_conf_port }}"
+  with_items:
+    - {
+      name: "{{ mongodb_root_account }}",
+      password: "{{ mongodb_root_password }}",
+      roles: "root"
+      }
+  no_log: true
+
+- name: RBAC | Create administrative user "{{ mongodb_admin_account }}"
+  mongodb_user:
+    database: admin
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    #update_password: "{{ mongodb_user_update_password }}"
+    roles: "{{ item.roles }}"
+    login_port: "{{ mongodb_conf_port }}"
+  with_items:
+    - {
+      name: "{{ mongodb_admin_account}}",
+      password: "{{ mongodb_admin_password }}",
+      roles: "userAdminAnyDatabase"
+      }
+  no_log: true
+
+- name: RBAC | Create backup user "{{ mongodb_backup_account }}"
+  mongodb_user:
+    database: admin
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    #update_password: "{{ mongodb_user_update_password }}"
+    roles: "{{ item.roles }}"
+    login_port: "{{ mongodb_conf_port }}"
+  with_items:
+    - {
+      name: "{{ mongodb_backup_account }}",
+      password: "{{ mongodb_backup_password }}",
+      roles: "backup,clusterMonitor"
+      }
+  no_log: true
