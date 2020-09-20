@@ -1,5 +1,10 @@
 ---
 
+- name: Start MongoDB Service with auth mode disabled
+  service:
+    name: mongod
+    state: started
+
 - name: RBAC | create root user "{{ mongodb_root_account}}"
   mongodb_user:
     database: admin
