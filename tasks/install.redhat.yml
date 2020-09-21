@@ -8,6 +8,7 @@
       - python-pymongo
     state: absent
 
+
 - name: Cleanup any old installation - Unit files
   file:
     path: "{{ item }}"
@@ -19,13 +20,15 @@
     - /etc/systemd/system/mongodb-org-server.service
   notify: systemd reload
 
-- name: Install MongoDB {{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }} RPM GPG key
+
+- name: Mongo Install | RPM GPG key MongoDB {{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }}
   rpm_key:
     state: present
     key: "https://www.mongodb.org/static/pgp/server-{{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }}.asc"
   when: mongodb_enable_yum_repository
 
-- name: Create MongoDB {{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }} repo
+
+- name: Mongo Install | Create MongoDB {{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }} repository
   yum_repository:
     name: MongoDB-{{ mongodb_install_version_major }}-{{ mongodb_install_version_minor }}
     description: "MongoDB Repo"
@@ -34,7 +37,8 @@
     state: present
   when: mongodb_enable_yum_repository
 
-- name: Install MongoDB packages
+
+- name: Mongo Install | Install MongoDB {{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }} packages
   yum: 
     name: 
       - mongodb-org-{{mongodb_install_version_major}}.{{mongodb_install_version_minor}}.{{mongodb_install_version_patch}}
@@ -42,13 +46,15 @@
       - numactl
     state: present
 
-- name: Install YUM/DNF versionlock package
+
+- name: Mongo Install | Install YUM/DNF versionlock plugin
   yum:
     name: python3-dnf-plugin-versionlock
     state: present
   when: mongodb_install_package_lock
 
-- name: Enable versionlock for MongoDB packages
+
+- name: Mongo Install | Enable versionlock for MongoDB packages
   shell: dnf versionlock add {{ item }}
   args:
     warn: false
@@ -60,29 +66,10 @@
     - mongodb-org-tools
   when: mongodb_install_package_lock
 
+
 #- name: Install numactl package
 #  yum:
 #    name: numactl
 #    state: present
 #    lock_timeout: "{{ yum_lock_timeout }}"
 #  when: mongodb_use_numa | bool
-
-- name: Install PyMongo package
-  yum:
-    name: python3-pymongo
-    state: present
-  when: not mongodb_pymongo_from_pip
-
-- name: Install PIP
-  yum:
-    name:
-      - python3-devel
-      - python3-pip
-  when: mongodb_pymongo_from_pip | bool
-
-- name: Install PyMongo from PIP
-  pip:
-    name: pymongo
-    state: "{{ mongodb_pymongo_pip_version is defined | ternary('present', 'latest') }}"
-    version: "{{ mongodb_pymongo_pip_version | default(omit) }}"
-  when: mongodb_pymongo_from_pip | bool
