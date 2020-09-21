@@ -1,6 +1,6 @@
 ---
 
-- name: Monoo Config | Install PyMongo package
+- name: Mongo Config | Install PyMongo package
   yum:
     name: python3-pymongo
     state: present
