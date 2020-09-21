@@ -1,6 +1,6 @@
 ---
 
-- name: Create MongoDB config directories
+- name: Mongo Config | Create config directories
   file:
     state: directory
     path: "{{ mongodb_conf_file | dirname }}"
@@ -12,7 +12,7 @@
   notify: mongodb restart
 
 
-- name: Configure MongoDB service and daemon
+- name: Mongo Config | Configure MongoDB init-service and daemon
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -29,7 +29,7 @@
     - mongodb restart
 
 
-- name: Create Mongo data directory {{ mongodb_conf_dbPath }} 
+- name: Mongo Config | Create database directory {{ mongodb_conf_db_dir }} 
   file:
     path: "{{ mongodb_conf_db_dir }}"
     state: directory
@@ -37,9 +37,10 @@
     mode: '0755'
     owner: mongod
     group: mongod
+  when: mongodb_conf_log_dir  != "/var/lib/mongo"
 
 
-- name: Create Mongo log directory {{ mongodb_conf_dbPath }} 
+- name: Mongo Config | Create log directory {{ mongodb_conf_log_dir }} 
   file:
     path: "{{ mongodb_conf_log_dir }}"
     state: directory
@@ -47,15 +48,21 @@
     mode: '0755'
     owner: mongod
     group: mongod
-
-- include: selinux.yml
-  when: ansible_facts['os_family'] == "RedHat"
+  when: mongodb_conf_log_dir  != "/var/log/mongodb"
 
 
-- name: Disable Transparent Huge Pages (THP)
+- name: Mongo Config | Disable Transparent Huge Pages (THP)
   template:
     src: disable-transparent-huge-pages.service.j2
     dest: /etc/systemd/system/disable-transparent-huge-pages.service
     owner: root
     group: root
     mode: "0644"
+  notify: systemd reload
+
+- name: Mongo Config | Start and enable disable-transparent-huge-pages service
+  service:
+    name: disable-transparent-huge-pages
+    state: restarted
+    enabled: true
+  notify: mongodb restart

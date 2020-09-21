@@ -1,11 +1,11 @@
 ---
 
-- name: Remove configfile created with package installation
+- name: Mongo Config | Remove configfile created with package installation
   file:
     path: /etc/mongod.conf
     state: absent  
-    
-- name: Deploy auth configuration for MongoDB
+
+- name: Mongo Config | Deploy auth configuration for MongoDB
   template:
     src: mongod.conf.j2
     dest: "{{ mongodb_conf_file }}"

@@ -15,3 +15,10 @@
     name: mongod
     state: restarted
     enabled: true
+
+
+- name: firewalld restart
+  service:
+    name: firewalld
+    state: restarted
+    enabled: true

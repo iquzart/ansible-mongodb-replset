@@ -1,17 +1,17 @@
 ---
 
-- name: Disable SELinux
+- name: SELinux | Disable service
   selinux:
     state: disabled
   when: not configure_selinux
 
-- name: Enable SELinux
+- name: SELinux | Enable service
   selinux:
     state: enforcing
     policy: targeted
   when: configure_selinux
 
-- name: Install SELinux support packages
+- name: SELinux | Install support packages
   yum:
     name:
       - checkpolicy
@@ -19,40 +19,47 @@
     state: present
   when: configure_selinux
 
-- name: Copy SELinux custom policy for mongodb_cgroup_memory
+- name: SELinux | mongodb_cgroup_memory | Copy custom policy
   copy: 
     src: selinux/mongodb_cgroup_memory.te
     dest: /tmp/mongodb_cgroup_memory.te
   when: configure_selinux
 
-- name: Compile SELinux custom policy module
+- name: SELinux | mongodb_cgroup_memory | Compile custom policy module
   command: checkmodule -M -m -o /tmp/mongodb_cgroup_memory.mod /tmp/mongodb_cgroup_memory.te
   when: configure_selinux
 
-- name: Build SELinux custom policy package
+- name: SELinux | mongodb_cgroup_memory | Build custom policy package
   command: semodule_package -o /tmp/mongodb_cgroup_memory.pp -m /tmp/mongodb_cgroup_memory.mod
   when: configure_selinux
 
-- name: Load SELinux custom policy package
+- name: SELinux | mongodb_cgroup_memory | Load custom policy package
   command: semodule -i /tmp/mongodb_cgroup_memory.pp
   when: configure_selinux
 
-- name: Configure SELinux for {{ mongodb_conf_db_dir }} and {{ mongodb_conf_log_dir }} directories
+- name: SELinux | Set MongoDB context for {{ mongodb_conf_db_dir }} directory
   sefcontext:
-    target: "{{ item.target }}"
-    setype: "{{ item.setype }}"
+    target: "{{ mongodb_conf_db_dir }}(/.*)?"
+    setype: mongod_var_lib_t
     reload: true
     state: present
-  with_items:
-    - target: "{{ mongodb_conf_db_dir }}(/.*)?"
-      setype: mongod_var_lib_t
-    - target: "{{ mongodb_conf_log_dir }}(/.*)?"
-      setype: mongod_log_t
-  when: configure_selinux
+  when: 
+    - configure_selinux
+    - mongodb_conf_log_dir  != "/var/lib/mongo"
   notify: mongodb restart
 
+- name: SELinux | Set MongoDB context for {{ mongodb_conf_log_dir }} directory
+  sefcontext:
+    target: "{{ mongodb_conf_log_dir }}(/.*)?"
+    setype: mongod_log_t
+    reload: true
+    state: present
+  when: 
+    - configure_selinux
+    - mongodb_conf_log_dir  != "/var/log/mongodb"
+  notify: mongodb restart
 
-- name: Ensure SELinux file contexts are applied
+- name: SELinux | Ensure MongoDB file contexts are applied
   shell: restorecon -vr "{{ item }}"
   with_items:
     - "{{ mongodb_conf_db_dir }}"
@@ -60,7 +67,7 @@
   register: restorecon
   changed_when: restorecon.stdout != ""
 
-- name: configure SELinux network ports for mongodb
+- name: SELinux | Configure MongoDB network port {{ mongodb_conf_port }}
   seport:
     ports: "{{ mongodb_conf_port }}"
     proto: tcp
