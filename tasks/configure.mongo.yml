@@ -7,8 +7,6 @@
     owner: root
     group: root
     mode: "0755"
-  with_items:
-    - path: "{{ mongodb_conf_file | dirname }}"
   notify: mongodb restart
 
 

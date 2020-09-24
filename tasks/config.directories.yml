@@ -1,0 +1,30 @@
+---
+- name: Mongo Config | Create config directories
+  file:
+    state: directory
+    path: "{{ mongodb_conf_file | dirname }}"
+    owner: root
+    group: root
+    mode: "0755"
+  notify: mongodb restart
+
+- name: Mongo Config | Create database directory {{ mongodb_conf_db_dir }} 
+  file:
+    path: "{{ mongodb_conf_db_dir }}"
+    state: directory
+    recurse: yes
+    mode: '0755'
+    owner: mongod
+    group: mongod
+  when: mongodb_conf_log_dir  != "/var/lib/mongo"
+
+
+- name: Mongo Config | Create log directory {{ mongodb_conf_log_dir }} 
+  file:
+    path: "{{ mongodb_conf_log_dir }}"
+    state: directory
+    recurse: yes
+    mode: '0755'
+    owner: mongod
+    group: mongod
+  when: mongodb_conf_log_dir  != "/var/log/mongodb"

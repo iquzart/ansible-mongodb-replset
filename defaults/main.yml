@@ -27,16 +27,22 @@ mongodb_conf_cloudmonitoring: "off"
 
 # Log rotation
 mongodb_logrotate: yes                             # Rotate mongodb logs.
-mongodb_logrotate_options:
-  - compress
-  - copytruncate
-  - daily
-  - dateext
-  - rotate 7
-  - size 10M
+#mongodb_logrotate_options:
+#  - compress
+#  - copytruncate
+#- daily
+#  - dateext
+#  - rotate 7
+#  - size 10M
 
 # Systemd Units
 mongodb_daemon_unitfile: /etc/systemd/system/mongod.service 
+
+# Replicset configuration 
+mongodb_replication_enabled: true
+#mongodb_replication_key_dir: /etc/mongodb
+mongodb_replication_key_file: /etc/mongodb/repl.key
+mongodb_replication_set_name: rs01
 
 
 # PyMongo Configuration

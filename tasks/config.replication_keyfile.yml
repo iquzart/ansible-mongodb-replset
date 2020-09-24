@@ -1,0 +1,38 @@
+---
+#- name: replication | Checking For Existing Replication Set Keyfile {{ mongodb_replication_key_file }}
+#  stat:
+#    path: "{{ mongodb_replication_key_file }}"
+#  register: mongodb_repl_key_file
+
+- name: replication | Generating Replication Set Keyfile
+  shell: openssl rand -base64 756 | xargs echo -n
+  register: repl_set_key
+  when: 
+    - mongodb_replication_enabled
+#    - not mongodb_repl_keyfile['stat']['exists']
+    - "'master' in group_names"
+
+- name: replication | Creating Replication Set Keyfile {{ mongodb_replication_key_file }}
+  file:
+    path: "{{ mongodb_replication_key_file }}"
+    state: touch
+  when:
+    - mongodb_replication_enabled
+
+- name: replication | Adding Replication Set Key to {{ mongodb_replication_key_file }}
+  lineinfile:
+    dest: "{{ mongodb_replication_key_file }}"
+    line: "{{ hostvars[groups['master'][0]]['repl_set_key']['stdout'] }}"
+  #become: true#
+  when:
+    - mongodb_replication_enabled
+
+
+
+- name: Replication | Set permission for {{ mongodb_replication_key_file }}
+  file:
+    path: "{{ mongodb_replication_key_file }}"
+    owner:  mongod       #"{{ mongodb_user }}"
+    group:  mongod       # "{{ mongodb_group }}"
+    mode: 0400
+

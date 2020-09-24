@@ -1,0 +1,31 @@
+---
+
+- name: Copy replicaset conf js files
+  template: 
+    src: "{{item}}.js.j2"
+    dest: "/tmp/{{item}}.js"
+  loop:
+    - initReplicaset
+    #- createUserAdmin
+    #- createRootUser
+    #- createUser
+    - addMembers
+  when: "'master' in group_names"
+
+- name: Init replicaset on primary {{ inventory_hostname }}
+  shell:  mongo --host {{ inventory_hostname }} --authenticationDatabase admin --username {{ mongodb_root_account }} --password {{ mongodb_root_password }} /tmp/initReplicaset.js
+  register: replicaset_status
+  ignore_errors: yes
+  failed_when:
+    - replicaset_status.rc != 0
+#    - '"Authentication failed" not in replicaset_status.stdout'
+  when: "'master' in group_names"  
+
+- name: Add members on primary {{ inventory_hostname }}
+  shell:  mongo --host {{ inventory_hostname }} --authenticationDatabase admin --username {{ mongodb_root_account }} --password {{ mongodb_root_password }} /tmp/addMembers.js
+  register: replicaset_status
+  ignore_errors: yes
+  failed_when:
+    - replicaset_status.rc != 0
+#    - '"Authentication failed" not in replicaset_status.stdout'
+  when: "'master' in group_names"  

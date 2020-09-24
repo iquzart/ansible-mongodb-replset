@@ -12,5 +12,9 @@
     owner: root
     group: root    
     mode: "0644"
-  notify:
-    - mongodb restart  
+
+- name: Mongo Config | Restarting MongoDB # noqa 503
+  service:
+    name: mongod
+    state: restarted
+

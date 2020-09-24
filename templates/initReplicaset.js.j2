@@ -1,0 +1,2 @@
+rs.initiate({ _id : "{{ mongodb_replication_set_name }}", members: [{ _id : 0, host : "{{ groups['master'][0] }}:{{ mongodb_conf_port }}" }]})
+printjson(rs.status())
