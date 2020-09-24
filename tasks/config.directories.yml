@@ -1,4 +1,10 @@
 ---
+
+- name: Mongo Config | Check if config directory avaliable
+  stat:
+    path: "{{ mongodb_conf_file | dirname }}"
+  register: stat_conf_directory
+
 - name: Mongo Config | Create config directories
   file:
     state: directory
@@ -6,7 +12,15 @@
     owner: root
     group: root
     mode: "0755"
-  notify: mongodb restart
+  when: stat_conf_directory.stat.exists == false
+
+
+
+- name: Mongo Config | Check if database directory {{ mongodb_conf_db_dir }}
+  stat:
+    path: "{{ mongodb_conf_db_dir | dirname }}"
+  register: stat_db_directory
+  when: mongodb_conf_db_dir  != "/var/lib/mongo"
 
 - name: Mongo Config | Create database directory {{ mongodb_conf_db_dir }} 
   file:
@@ -16,8 +30,16 @@
     mode: '0755'
     owner: mongod
     group: mongod
-  when: mongodb_conf_log_dir  != "/var/lib/mongo"
+  when: 
+    - mongodb_conf_db_dir  != "/var/lib/mongo"
+    - stat_db_directory.stat.exists == false
 
+
+- name: Mongo Config | Check if database directory {{ mongodb_conf_log_dir }}
+  stat:
+    path: "{{ mongodb_conf_log_dir | dirname }}"
+  register: stat_log_directory
+  when: mongodb_conf_log_dir  != "/var/log/mongodb"
 
 - name: Mongo Config | Create log directory {{ mongodb_conf_log_dir }} 
   file:
@@ -27,4 +49,6 @@
     mode: '0755'
     owner: mongod
     group: mongod
-  when: mongodb_conf_log_dir  != "/var/log/mongodb"
+  when: 
+    - mongodb_conf_log_dir  != "/var/log/mongodb"
+    - stat_log_directory.stat.exists == false
