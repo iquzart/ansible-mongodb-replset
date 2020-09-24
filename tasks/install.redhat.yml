@@ -53,6 +53,12 @@
     state: present
   when: mongodb_install_package_lock
 
+- name: Mongo Install | Checking versionlock for MongoDB packages
+  shell: dnf versionlock list
+  args:
+    warn: false
+  register: versionlock_result
+  when: mongodb_install_package_lock
 
 - name: Mongo Install | Enable versionlock for MongoDB packages
   shell: dnf versionlock add {{ item }}
@@ -64,12 +70,6 @@
     - mongodb-org-shell 
     - mongodb-org-mongos 
     - mongodb-org-tools
-  when: mongodb_install_package_lock
-
-
-#- name: Install numactl package
-#  yum:
-#    name: numactl
-#    state: present
-#    lock_timeout: "{{ yum_lock_timeout }}"
-#  when: mongodb_use_numa | bool
+  when: 
+    - mongodb_install_package_lock
+    - not "mongodb" in versionlock_result.stdout

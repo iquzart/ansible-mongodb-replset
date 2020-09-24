@@ -6,9 +6,6 @@
     dest: "/tmp/{{item}}.js"
   loop:
     - initReplicaset
-    #- createUserAdmin
-    #- createRootUser
-    #- createUser
     - addMembers
   when: "'master' in group_names"
 
@@ -18,7 +15,6 @@
   ignore_errors: yes
   failed_when:
     - replicaset_status.rc != 0
-#    - '"Authentication failed" not in replicaset_status.stdout'
   when: "'master' in group_names"  
 
 - name: Add members on primary {{ inventory_hostname }}
@@ -27,5 +23,4 @@
   ignore_errors: yes
   failed_when:
     - replicaset_status.rc != 0
-#    - '"Authentication failed" not in replicaset_status.stdout'
   when: "'master' in group_names"  

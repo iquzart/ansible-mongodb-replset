@@ -4,28 +4,29 @@
 
 
 
+
 - include: install.redhat.yml
 #  when: ansible_facts['os_family'] == "RedHat"
 
-- include: config.hosts.yml
+#- include: config.hosts.yml
 
-- include: config.directories.yml
+#- include: config.directories.yml
 
-- include: config.selinux.yml
+#- include: config.selinux.yml
 
-- include: config.init_service.yml
+#- include: config.init_service.yml
 
-- include: config.firewalld.yml
+#- include: config.firewalld.yml
 
-- include: config.systemd_units.yml
+#- include: config.systemd_units.yml
 
-- include: config.mongo_users.yml
+#- include: config.mongo_users.yml
 
-- include: config.replication_keyfile.yml
+#- include: config.replication_keyfile.yml
 
-- include: config.mongo_final.yml
+#- include: config.mongo_final.yml
 
-- include: config.replication.yml
+#- include: config.replication.yml
 
 # - include: test.yml
 
