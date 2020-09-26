@@ -1,26 +1,5 @@
 ---
 
-- name: Cleanup any old installation - Packages
-  yum:
-    name:
-      - mongodb
-      - mongodb-server
-      - python-pymongo
-    state: absent
-
-
-- name: Cleanup any old installation - Unit files
-  file:
-    path: "{{ item }}"
-    state: absent
-  with_items:
-    - /etc/systemd/system/mongodb.service
-    - /etc/systemd/system/mongodb-server.service
-    - /etc/systemd/system/mongodb-org.service
-    - /etc/systemd/system/mongodb-org-server.service
-  notify: systemd reload
-
-
 - name: Mongo Install | RPM GPG key MongoDB {{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }}
   rpm_key:
     state: present

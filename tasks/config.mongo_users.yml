@@ -1,5 +1,4 @@
 ---
-
 - name: Mongo Config | Install PyMongo package
   yum:
     name: python3-pymongo
@@ -33,9 +32,9 @@
     login_port: "{{ mongodb_conf_port }}"
   with_items:
     - {
-      name: "{{ mongodb_root_account }}",
-      password: "{{ mongodb_root_password }}",
-      roles: "root"
+        name: "{{ mongodb_root_account }}",
+        password: "{{ mongodb_root_password }}",
+        roles: "root",
       }
   no_log: true
 
@@ -49,9 +48,9 @@
     login_port: "{{ mongodb_conf_port }}"
   with_items:
     - {
-      name: "{{ mongodb_admin_account}}",
-      password: "{{ mongodb_admin_password }}",
-      roles: "userAdminAnyDatabase"
+        name: "{{ mongodb_admin_account}}",
+        password: "{{ mongodb_admin_password }}",
+        roles: "userAdminAnyDatabase",
       }
   no_log: true
 
@@ -65,8 +64,8 @@
     login_port: "{{ mongodb_conf_port }}"
   with_items:
     - {
-      name: "{{ mongodb_backup_account }}",
-      password: "{{ mongodb_backup_password }}",
-      roles: "backup,clusterMonitor"
+        name: "{{ mongodb_backup_account }}",
+        password: "{{ mongodb_backup_password }}",
+        roles: "backup,clusterMonitor",
       }
   no_log: true

@@ -1,6 +1,6 @@
 galaxy_info:
   author: Muhammed Iqbal
-  description: Ansibel role for MongoDB
+  description: Ansibel role for MongoDB Replicaset
 
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value

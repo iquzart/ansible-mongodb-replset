@@ -16,7 +16,6 @@
     state: restarted
     enabled: true
 
-
 - name: firewalld restart
   service:
     name: firewalld

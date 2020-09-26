@@ -1,9 +1,8 @@
 ---
-
 - name: update host file
   lineinfile:
     dest: /etc/hosts
-    regexp: '{{ hostvars[item].ansible_default_ipv4.address }}.*{{ item }}$'
+    regexp: "{{ hostvars[item].ansible_default_ipv4.address }}.*{{ item }}$"
     line: "{{ hostvars[item].ansible_default_ipv4.address }}  {{item}}"
     state: present
   become: yes

@@ -1,5 +1,4 @@
 ---
-
 - name: Mongo Config | Configure MongoDB init-service and daemon
   template:
     src: mongod-init.conf.j2
