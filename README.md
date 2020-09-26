@@ -68,7 +68,7 @@ Example Playbook
 
 Optional Requirement
 --------------------
--  CentOS Baseline - [a link](https://github.com/iquzart/ansible-centos-baseline/blob/master/README.md)
+-  CentOS Baseline - [CentOS-Baseline Ansible Role](https://github.com/iquzart/ansible-centos-baseline/blob/master/README.md)
 
 License
 -------
