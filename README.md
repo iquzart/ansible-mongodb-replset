@@ -65,6 +65,40 @@ Example Playbook
     roles:
       - mongodb-replicaset
 ```
+Host Inventory
+-----------
+```
+all:
+    hosts:
+    children:
+        mongo:
+            hosts:
+                mongo-01.example.com:
+                    host_name: mongodb-01
+                    host_ip: "192.168.122.201"
+                mongo-02.example.com:
+                    host_name: mongodb-02
+                    host_ip: "192.168.122.202"
+                mongo-03.example.com:
+                    host_name: mongodb-03
+                    host_ip: "192.168.122.203"
+        master:
+            hosts:
+                mongo-01.example.com:
+        replicas:
+            hosts:
+                mongo-02.example.com:
+                    priority: 1
+                mongo-03.example.com:
+                    priority: 1
+        arbiter:
+            hosts:
+#                mongo-03.example.com:
+#                    priority: 0
+
+
+```
+
 
 Optional Requirement
 --------------------
