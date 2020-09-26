@@ -65,6 +65,11 @@ Example Playbook
     roles:
       - mongodb-replicaset
 ```
+
+Optional Requirement
+--------------------
+-  CentOS Baseline - [a link](https://github.com/iquzart/ansible-centos-baseline/blob/master/README.md)
+
 License
 -------
 

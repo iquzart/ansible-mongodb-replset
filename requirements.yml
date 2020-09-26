@@ -1,0 +1,5 @@
+---
+- name: centos-baseline
+  scm: git
+  src: git+https://github.com/iquzart/ansible-centos-baseline.git
+  version: master 
