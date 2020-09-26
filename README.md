@@ -68,14 +68,19 @@ Example Playbook
 
 Optional Requirement
 --------------------
--  CentOS Baseline - [CentOS-Baseline Ansible Role](https://github.com/iquzart/ansible-centos-baseline/blob/master/README.md)
+-  CentOS Baseline - [Ansible Role](https://github.com/iquzart/ansible-centos-baseline/blob/master/README.md)
 
 License
 -------
-
 MIT
 
 To-DO
 -------
-1. Ubuntu Support
+1. TLS support
 2. Standalone installation
+3. Ubuntu Support
+
+Author Information
+------------------
+
+Muhammed Iqbal <iquzart@hotmail.com>
