@@ -1,6 +1,6 @@
 ---
-#- name: Enable Firewalld 
-  
+#- name: Enable Firewalld
+
 - name: FirewallD | Allow access on port {{ mongodb_conf_port }}
   firewalld:
     port: "{{ mongodb_conf_port }}/tcp"

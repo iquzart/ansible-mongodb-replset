@@ -1,38 +1,120 @@
-Ansible MongoDB
+Ansible MongoDB Replica set
 =========
 
-Under Development
-
-Requirements
-------------
-
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Ansible role for MongoDB Replicaset configuration
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```
+# Repository 
+mongodb_enable_yum_repository: true
+mongodb_install_version_major: 4
+mongodb_install_version_minor: 4
+mongodb_install_version_patch: "*"
+mongodb_install_package_lock: true
 
-Dependencies
-------------
+# SELinux Configuration
+configure_selinux: True
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+# MongoDB Configuration
+mongodb_conf_file: /etc/mongodb/mongod.conf            
+mongodb_conf_db_dir: /data/mongo-data
+mongodb_conf_log_dir: /var/log/mongodb                 
+mongodb_conf_dbEngine: wiredTiger                      
+mongodb_conf_auth: true                                
+mongodb_conf_bindIp: "0.0.0.0"                       
+mongodb_conf_journal: true                             
+mongodb_conf_maxConns: 1000                           
+mongodb_conf_port: 27017                               
+mongodb_conf_oplogSize: 1024
+mongodb_conf_cloudmonitoring: "off"
+
+# Systemd Units
+mongodb_daemon_unitfile: /etc/systemd/system/mongod.service 
+
+# Replicset configuration 
+mongodb_replication_enabled: true
+mongodb_replication_key_file: /etc/mongodb/repl.key
+mongodb_replication_set_name: rs01
+
+# PyMongo Configuration
+mongodb_pymongo_from_pip: true                  
+mongodb_pymongo_pip_version: 3.7.1
+
+# Account configuration
+mongodb_root_account: root
+mongodb_root_password: "p@ssw0rd"
+
+mongodb_admin_account: dbadmin
+mongodb_admin_password: "p@ssw0rd"
+
+mongodb_backup_account: backupadmin
+mongodb_backup_password: "p@ssw0rd"
+```
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+```
+  - name: Mongo DB Setup 
+    hosts: mongo
+    remote_user: root
+    become: yes
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+    roles:
+      - mongodb-replicaset
+```
+Host Inventory
+-----------
+```
+all:
+    hosts:
+    children:
+        mongo:
+            hosts:
+                mongo-01.example.com:
+                    host_name: mongodb-01
+                    host_ip: "192.168.122.201"
+                mongo-02.example.com:
+                    host_name: mongodb-02
+                    host_ip: "192.168.122.202"
+                mongo-03.example.com:
+                    host_name: mongodb-03
+                    host_ip: "192.168.122.203"
+        master:
+            hosts:
+                mongo-01.example.com:
+        replicas:
+            hosts:
+                mongo-02.example.com:
+                    priority: 1
+                mongo-03.example.com:
+                    priority: 1
+        arbiter:
+            hosts:
+#                mongo-03.example.com:
+#                    priority: 0
+
+
+```
+
+
+Optional Requirement
+--------------------
+-  CentOS Baseline - [Ansible Role](https://github.com/iquzart/ansible-centos-baseline/blob/master/README.md)
 
 License
 -------
+MIT
 
-BSD
+To-DO
+-------
+1. TLS support
+2. Standalone installation
+3. Ubuntu Support
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Muhammed Iqbal <iquzart@hotmail.com>

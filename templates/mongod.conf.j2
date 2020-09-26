@@ -30,11 +30,14 @@ security:
 {% if mongodb_conf_auth %}
   authorization: {{ 'enabled' if mongodb_conf_auth else 'disabled' }}
 {% endif %}
+  keyFile: {{ mongodb_replication_key_file }}
+  #javascriptEnabled: false
 
 
 #operationProfiling:
 
-#replication:
+replication:
+  replSetName: {{ mongodb_replication_set_name }}
 
 #sharding:
 

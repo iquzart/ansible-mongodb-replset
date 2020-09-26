@@ -1,0 +1,7 @@
+{% for replica in groups['replicas'] %}
+rs.add({ host: "{{ replica }}:{{ mongodb_conf_port }}", priority: {{ hostvars[replica]['priority'] }} })
+{% endfor %}
+{% for arbiter in groups['arbiter'] %}
+rs.addArb("{{ arbiter }}:{{ mongodb_conf_port }}")
+{% endfor %}
+printjson(rs.status())

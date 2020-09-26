@@ -2,9 +2,25 @@
 # tasks file for mongodb-replicaset
 
 - include: install.redhat.yml
-- include: configure.redhat.yml
-- include: selinux.yml
-  when: ansible_facts['os_family'] == "RedHat"
-- include: common.accounts.yml
-- include: final.redhat.yml
-- include: configure.firewalld.yml
+#  when: ansible_facts['os_family'] == "RedHat"
+
+- include: config.hosts.yml
+
+- include: config.directories.yml
+
+- include: config.selinux.yml
+
+- include: config.init_service.yml
+
+- include: config.firewalld.yml
+
+- include: config.systemd_units.yml
+
+- include: config.mongo_users.yml
+
+- include: config.replication_keyfile.yml
+
+- include: config.mongo_final.yml
+
+- include: config.replication.yml
+

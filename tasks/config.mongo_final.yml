@@ -1,16 +1,18 @@
 ---
-
 - name: Mongo Config | Remove configfile created with package installation
   file:
     path: /etc/mongod.conf
-    state: absent  
+    state: absent
 
 - name: Mongo Config | Deploy auth configuration for MongoDB
   template:
     src: mongod.conf.j2
     dest: "{{ mongodb_conf_file }}"
     owner: root
-    group: root    
+    group: root
     mode: "0644"
-  notify:
-    - mongodb restart  
+
+- name: Mongo Config | Restarting MongoDB
+  service:
+    name: mongod
+    state: restarted
