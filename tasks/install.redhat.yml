@@ -1,11 +1,9 @@
 ---
-
 - name: Mongo Install | RPM GPG key MongoDB {{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }}
   rpm_key:
     state: present
     key: "https://www.mongodb.org/static/pgp/server-{{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }}.asc"
   when: mongodb_enable_yum_repository
-
 
 - name: Mongo Install | Create MongoDB {{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }} repository
   yum_repository:
@@ -16,15 +14,13 @@
     state: present
   when: mongodb_enable_yum_repository
 
-
 - name: Mongo Install | Install MongoDB {{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }} packages
-  yum: 
-    name: 
+  yum:
+    name:
       - mongodb-org-{{mongodb_install_version_major}}.{{mongodb_install_version_minor}}.{{mongodb_install_version_patch}}
       - mongodb-org-server-{{mongodb_install_version_major}}.{{mongodb_install_version_minor}}.{{mongodb_install_version_patch}}
       - numactl
     state: present
-
 
 - name: Mongo Install | Install YUM/DNF versionlock plugin
   yum:
@@ -43,12 +39,12 @@
   shell: dnf versionlock add {{ item }}
   args:
     warn: false
-  loop: 
-    - mongodb-org 
-    - mongodb-org-server 
-    - mongodb-org-shell 
-    - mongodb-org-mongos 
+  loop:
+    - mongodb-org
+    - mongodb-org-server
+    - mongodb-org-shell
+    - mongodb-org-mongos
     - mongodb-org-tools
-  when: 
+  when:
     - mongodb_install_package_lock
     - not "mongodb" in versionlock_result.stdout

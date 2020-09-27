@@ -2,22 +2,23 @@
 # handlers file for mongodb-replicaset
 
 - name: systemd reload
-  shell: systemctl daemon-reload
+  systemd: 
+    daemon_reload: yes
 
 - name: mongodb reload
-  service:
+  systemd:
     name: mongod
     state: reloaded
     enabled: true
 
 - name: mongodb restart
-  service:
+  systemd:
     name: mongod
     state: restarted
     enabled: true
 
 - name: firewalld restart
-  service:
+  systemd:
     name: firewalld
     state: restarted
     enabled: true
