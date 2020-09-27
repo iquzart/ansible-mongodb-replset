@@ -1,7 +1,7 @@
-Ansible MongoDB Replica set
+Ansible MongoDB 
 =========
 
-Ansible role for MongoDB Replicaset configuration
+Ansible role for MongoDB configuration with Replicaset support.
 
 
 Features
@@ -16,19 +16,18 @@ Features
     - Enable/Disable Authentication (enable by default and recommended)
     - Create Users - Root, DBAdmin, Backup Admin
     - Replica priority can be configured
+    - SCARM Authentication
 ```
 
 Support Matrix
 --------------
 
-| OS | MongoDB Version |
-| --- | --- |
-| CentOS | 4.4.1 |
-| 8 | Supported |
-| 7 | Supported |
-| Ubuntu | 
-| 20.04 LTS | Supported
-| 19.04 LTS | Supported |
+| Destro | MongoDB 4.4 | MongoDB 4.3 |
+| --- | --- | --- | --- |
+| CentOS 8 | Supported (Tested) | Supported (Not Tested) |
+| CentOS 7 | Supported (Tested) | Supported (Not Tested) |
+| Ubuntu 20.04 LTS | Supported (Tested) | Supported (Not Tested) |
+| Ubuntu 19.04 LTS | Supported (Tested) | Supported (Not Tested) |
 
 
 Role Variables
@@ -147,6 +146,7 @@ MIT
 To-DO
 -------
 1. TLS support
+2. x509 Auth Support
 
 
 Author Information
