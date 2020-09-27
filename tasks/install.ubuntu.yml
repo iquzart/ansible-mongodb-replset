@@ -1,31 +1,31 @@
 ---
-- name: Update apt-get repo and cache
+- name: Install Debian | Update apt-get repo and cache
   apt:
     update_cache: yes
     force_apt_get: yes
     cache_valid_time: 3600
 
-- name: Mongo Install | Install support package gnupg
+- name: Install Debian | Install support package gnupg
   apt:
     name: gnupg
     state: present
   when: mongodb_enable_apt_repository
 
-- name: Mongo Install | GPG key MongoDB {{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }}
+- name: Install Debian | GPG key MongoDB {{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }}
   apt_key:
     url: https://www.mongodb.org/static/pgp/server-{{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }}.asc
     state: present
   when: mongodb_enable_apt_repository
 
-- name: debian | Adding MongoDB Apt Repo
+- name: Install Debian | Adding MongoDB Apt Repo
   apt_repository:
-    repo: "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/{{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }} multiverse"
+    repo: "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu {{ ansible_distribution_release }}/mongodb-org/{{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }} multiverse"
     state: present
     filename: "MongoDB-{{ mongodb_install_version_major }}-{{ mongodb_install_version_minor }}"
     update_cache: yes
   when: mongodb_enable_apt_repository
 
-- name: Mongo Install | Install MongoDB {{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }} packages
+- name: Install Debian | Install MongoDB {{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }} packages
   apt:
     name:
       - mongodb-org

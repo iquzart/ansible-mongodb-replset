@@ -1,8 +1,8 @@
 ---
 - name: Mongo Replset | Copy replicaset conf js files
   template:
-    src: "{{item}}.js.j2"
-    dest: "/tmp/{{item}}.js"
+    src: "{{ item }}.js.j2"
+    dest: "/tmp/{{ item }}.js"
   loop:
     - initReplicaset
     - addMembers

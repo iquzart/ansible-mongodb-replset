@@ -2,7 +2,7 @@
 - name: Flush all handlers at this point
   meta: flush_handlers
 
-- name: Mongo RBAC | create root user "{{ mongodb_root_account}}"
+- name: Mongo RBAC | create root user "{{ mongodb_root_account }}"
   mongodb_user:
     database: admin
     name: "{{ item.name }}"
@@ -26,7 +26,7 @@
     login_port: "{{ mongodb_conf_port }}"
   with_items:
     - {
-        name: "{{ mongodb_admin_account}}",
+        name: "{{ mongodb_admin_account }}",
         password: "{{ mongodb_admin_password }}",
         roles: "userAdminAnyDatabase",
       }
