@@ -25,8 +25,8 @@
     state: directory
     recurse: yes
     mode: "0755"
-    owner: mongod
-    group: mongod
+    owner: "{{ 'mongodb' if ansible_os_family == 'Debian' else 'mongod' }}"
+    group: "{{ 'mongodb' if ansible_os_family == 'Debian' else 'mongod' }}"
   when:
     - mongodb_conf_db_dir  != "/var/lib/mongo"
     - stat_db_directory.stat.exists == false
@@ -43,8 +43,8 @@
     state: directory
     recurse: yes
     mode: "0755"
-    owner: mongod
-    group: mongod
+    owner: "{{ 'mongodb' if ansible_os_family == 'Debian' else 'mongod' }}"
+    group: "{{ 'mongodb' if ansible_os_family == 'Debian' else 'mongod' }}"
   when:
     - mongodb_conf_log_dir  != "/var/log/mongodb"
     - stat_log_directory.stat.exists == false

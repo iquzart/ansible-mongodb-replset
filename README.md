@@ -1,20 +1,54 @@
-Ansible MongoDB Replica set
+Ansible MongoDB 
 =========
 
-Ansible role for MongoDB Replicaset configuration
+Ansible role for MongoDB configuration with Replicaset support.
+
+
+Features
+-----------
+```
+    - CentOS and Ubuntu Support
+    - Standalone and Replicaset configuration
+    - Configures SELinux on CentOS
+    - Configures Firewalld 
+    - MongoDB config file location can be changed to custome directory
+    - Custome Database and Log directories
+    - Enable/Disable Authentication (enable by default and recommended)
+    - Create Users - Root, DBAdmin, Backup Admin
+    - Replica priority can be configured
+    - SCARM Authentication
+```
+
+Support Matrix
+--------------
+
+| Destro | MongoDB 4.4 | MongoDB 4.3 |
+| --- | --- | --- |
+| CentOS 8 | Supported (Tested) | Supported (Not Tested) |
+| CentOS 7 | Supported (Tested) | Supported (Not Tested) |
+| Ubuntu 20.04 LTS | Supported (Tested) | Supported (Not Tested) |
+| Ubuntu 19.04 LTS | Supported (Tested) | Supported (Not Tested) |
+
 
 Role Variables
 --------------
 
 ```
-# Repository 
-mongodb_enable_yum_repository: true
+
+# MongoDB Version
 mongodb_install_version_major: 4
 mongodb_install_version_minor: 4
 mongodb_install_version_patch: "*"
+
+# CentOS
+mongodb_enable_yum_repository: true
 mongodb_install_package_lock: true
 
-# SELinux Configuration
+# Ubuntu
+mongodb_enable_apt_repository: true
+
+
+# SELinux Configuration (only on CentOS)
 configure_selinux: True
 
 # MongoDB Configuration
@@ -30,16 +64,17 @@ mongodb_conf_port: 27017
 mongodb_conf_oplogSize: 1024
 mongodb_conf_cloudmonitoring: "off"
 
+
 # Systemd Units
 mongodb_daemon_unitfile: /etc/systemd/system/mongod.service 
 
 # Replicset configuration 
-mongodb_replication_enabled: true
+mongodb_replication_enabled: true   #false will create a standalone MongoDB instance
 mongodb_replication_key_file: /etc/mongodb/repl.key
 mongodb_replication_set_name: rs01
 
-# PyMongo Configuration
-mongodb_pymongo_from_pip: true                  
+
+# PyMongo Configuration                 
 mongodb_pymongo_pip_version: 3.7.1
 
 # Account configuration
@@ -111,8 +146,8 @@ MIT
 To-DO
 -------
 1. TLS support
-2. Standalone installation
-3. Ubuntu Support
+2. x509 Auth Support
+
 
 Author Information
 ------------------

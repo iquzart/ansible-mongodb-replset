@@ -6,7 +6,7 @@
 
 - name: Mongo Config | Deploy auth configuration for MongoDB
   template:
-    src: mongod.conf.j2
+    src: mongod-standalone.conf.j2
     dest: "{{ mongodb_conf_file }}"
     owner: root
     group: root

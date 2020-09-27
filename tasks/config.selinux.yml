@@ -3,13 +3,20 @@
 - name: SELinux | Disable service
   selinux:
     state: disabled
+  register: status_selinux
   when: not configure_selinux | bool
 
 - name: SELinux | Enable service
   selinux:
     state: enforcing
     policy: targeted
+  register: status_selinux
   when: configure_selinux | bool
+
+- name: SELinux | Reboot if status changed
+  reboot:
+    reboot_timeout: 3600
+  when: status_selinux.changed 
 
 - name: SELinux | Install support packages
   yum:

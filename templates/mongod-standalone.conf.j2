@@ -17,7 +17,12 @@ storage:
 
 processManagement:
   fork: true
+{% if ansible_os_family == "RedHat" %}
   pidFilePath: /var/run/mongodb/mongod.pid
+{% endif %}
+{% if ansible_os_family == "Debian" %}
+  pidFilePath: /run/mongodb/mongod.pid
+{% endif %}
   timeZoneInfo: /usr/share/zoneinfo
 
 net:
@@ -30,14 +35,10 @@ security:
 {% if mongodb_conf_auth %}
   authorization: {{ 'enabled' if mongodb_conf_auth else 'disabled' }}
 {% endif %}
-  keyFile: {{ mongodb_replication_key_file }}
-  #javascriptEnabled: false
+
 
 
 #operationProfiling:
-
-replication:
-  replSetName: {{ mongodb_replication_set_name }}
 
 #sharding:
 
