@@ -25,8 +25,6 @@
     state: present
   when:
     - configure_selinux | bool
-    - ansible_selinux is defined
-    - ansible_selinux | bool
     - ansible_selinux.status == 'enabled'
 
 - name: SELinux | check mongodb_cgroup_memory module enabled already
@@ -34,8 +32,6 @@
   register: status_cgroup_module
   when:
     - configure_selinux | bool
-    - ansible_selinux is defined
-    - ansible_selinux | bool
     - ansible_selinux.status == 'enabled'
 
 - name: SELinux | mongodb_cgroup_memory | Copy custom policy
@@ -45,16 +41,12 @@
     mode: 0400
   when:
     - configure_selinux | bool
-    - ansible_selinux is defined
-    - ansible_selinux  | bool
     - not "mongodb_cgroup_memory" in status_cgroup_module.stdout
 
 - name: SELinux | mongodb_cgroup_memory | Compile custom policy module
   command: checkmodule -M -m -o /tmp/mongodb_cgroup_memory.mod /tmp/mongodb_cgroup_memory.te
   when:
     - configure_selinux | bool
-    - ansible_selinux is defined
-    - ansible_selinux  | bool
     - ansible_selinux.status == 'enabled'
     - not "mongodb_cgroup_memory" in status_cgroup_module.stdout
 
@@ -62,8 +54,6 @@
   command: semodule_package -o /tmp/mongodb_cgroup_memory.pp -m /tmp/mongodb_cgroup_memory.mod
   when:
     - configure_selinux | bool
-    - ansible_selinux is defined
-    - ansible_selinux
     - ansible_selinux.status == 'enabled'
     - not "mongodb_cgroup_memory" in status_cgroup_module.stdout
 
@@ -72,7 +62,7 @@
   when:
     - configure_selinux | bool
     - ansible_selinux is defined
-    - ansible_selinux  | bool
+    - ansible_selinux | bool
     - ansible_selinux.status == 'enabled'
     - not "mongodb_cgroup_memory" in status_cgroup_module.stdout
 
@@ -85,8 +75,6 @@
   when:
     - configure_selinux | bool
     - mongodb_conf_log_dir  != "/var/lib/mongo"
-    - ansible_selinux is defined
-    - ansible_selinux  | bool
     - ansible_selinux.status == 'enabled'
   notify: mongodb restart
 
@@ -99,8 +87,6 @@
   when:
     - configure_selinux | bool
     - mongodb_conf_log_dir  != "/var/log/mongodb"
-    - ansible_selinux is defined
-    - ansible_selinux  | bool
     - ansible_selinux.status == 'enabled'
   notify: mongodb restart
 
@@ -113,8 +99,6 @@
   changed_when: restorecon.stdout | length > 0
   when:
     - configure_selinux | bool
-    - ansible_selinux is defined
-    - ansible_selinux  | bool
     - ansible_selinux.status == 'enabled'
 
 - name: SELinux | Configure MongoDB network port {{ mongodb_conf_port }}
