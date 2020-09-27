@@ -59,7 +59,7 @@ mongodb_conf_dbEngine: wiredTiger
 mongodb_conf_auth: true                                
 mongodb_conf_bindIp: "0.0.0.0"                       
 mongodb_conf_journal: true                             
-mongodb_conf_maxConns: 1000                           
+mongodb_conf_maxConns: 64000                           
 mongodb_conf_port: 27017                               
 mongodb_conf_oplogSize: 1024
 mongodb_conf_cloudmonitoring: "off"
