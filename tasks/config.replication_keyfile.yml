@@ -8,22 +8,23 @@
   shell: openssl rand -base64 756 | xargs echo -n
   register: repl_set_key
   when:
-    - stat_repl_key_file.stat.exists == false
+    - not stat_repl_key_file.stat.exists
     - "'master' in group_names"
 
 - name: Mongo Replset | Creating Replication Set Keyfile {{ mongodb_replication_key_file }}
   file:
     path: "{{ mongodb_replication_key_file }}"
     state: touch
+    mode: 0400
   when:
-    - stat_repl_key_file.stat.exists == false
+    - not stat_repl_key_file.stat.exists
 
 - name: Mongo Replset | Adding Replication Set Key to {{ mongodb_replication_key_file }}
   lineinfile:
     dest: "{{ mongodb_replication_key_file }}"
     line: "{{ hostvars[groups['master'][0]]['repl_set_key']['stdout'] }}"
   when:
-    - stat_repl_key_file.stat.exists == false
+    - not stat_repl_key_file.stat.exists
 
 - name: Mongo Replset | Set permission for {{ mongodb_replication_key_file }}
   file:
