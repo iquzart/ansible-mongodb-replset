@@ -1,5 +1,4 @@
 ---
-
 - name: Flush all handlers at this point
   meta: flush_handlers
 
