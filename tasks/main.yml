@@ -18,9 +18,15 @@
 
 - include: config.mongo_users.yml
 
-- include: config.replication_keyfile.yml
+- include: config.mongo_standalone_service.yml
+  when: not mongodb_replication_enabled
 
-- include: config.mongo_final.yml
+- include: config.replication_keyfile.yml
+  when: mongodb_replication_enabled
+
+- include: config.mongo_reple_service.yml
+  when: mongodb_replication_enabled
 
 - include: config.replication.yml
+  when: mongodb_replication_enabled
 

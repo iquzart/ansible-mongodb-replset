@@ -1,5 +1,5 @@
 ---
-- name: replication | Checking For Existing Replication Set Keyfile {{ mongodb_replication_key_file }}
+- name: Mongo Replset | Checking For Existing Replication Set Keyfile {{ mongodb_replication_key_file }}
   stat:
     path: "{{ mongodb_replication_key_file }}"
   register: stat_repl_key_file
@@ -8,31 +8,26 @@
   shell: openssl rand -base64 756 | xargs echo -n
   register: repl_set_key
   when:
-    - mongodb_replication_enabled
     - stat_repl_key_file.stat.exists == false
     - "'master' in group_names"
 
-- name: replication | Creating Replication Set Keyfile {{ mongodb_replication_key_file }}
+- name: Mongo Replset | Creating Replication Set Keyfile {{ mongodb_replication_key_file }}
   file:
     path: "{{ mongodb_replication_key_file }}"
     state: touch
   when:
-    - mongodb_replication_enabled
     - stat_repl_key_file.stat.exists == false
 
-- name: replication | Adding Replication Set Key to {{ mongodb_replication_key_file }}
+- name: Mongo Replset | Adding Replication Set Key to {{ mongodb_replication_key_file }}
   lineinfile:
     dest: "{{ mongodb_replication_key_file }}"
     line: "{{ hostvars[groups['master'][0]]['repl_set_key']['stdout'] }}"
   when:
-    - mongodb_replication_enabled
     - stat_repl_key_file.stat.exists == false
 
-- name: Replication | Set permission for {{ mongodb_replication_key_file }}
+- name: Mongo Replset | Set permission for {{ mongodb_replication_key_file }}
   file:
     path: "{{ mongodb_replication_key_file }}"
     owner: mongod
     group: mongod
     mode: 0400
-  when:
-    - mongodb_replication_enabled
