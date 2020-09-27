@@ -5,6 +5,7 @@
   apt:
     name: firewalld
     state: present
+  when: ansible_os_family == "Debian"
 
 - name: FirewallD | Allow access on port {{ mongodb_conf_port }}
   firewalld:

@@ -19,7 +19,7 @@
   notify: systemd reload
   when: ansible_os_family == "Debian"
 
-- name: Mongo Config | Disable Transparent Huge Pages (THP)
+- name: System Config | Disable Transparent Huge Pages (THP)
   template:
     src: disable-transparent-huge-pages.service.j2
     dest: /etc/systemd/system/disable-transparent-huge-pages.service
@@ -28,7 +28,7 @@
     mode: "0644"
   notify: systemd reload
 
-- name: Mongo Config | Start and enable disable-transparent-huge-pages service
+- name: System Config | Start and enable disable-transparent-huge-pages service
   service:
     name: disable-transparent-huge-pages
     state: restarted
