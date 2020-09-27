@@ -1,0 +1,19 @@
+---
+- name: Mongo Config | Install PIP
+  yum:
+    name:
+      - python3-devel
+      - python3-pip
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Mongo Config | Install PIP
+  apt:
+    name: python3-pip
+  when: ansible_os_family == "Debian"
+
+- name: Mongo Config | Install PyMongo from PIP
+  pip:
+    name: pymongo
+    state: "{{ mongodb_pymongo_pip_version is defined | ternary('present', 'latest') }}"
+    version: "{{ mongodb_pymongo_pip_version | default(omit) }}"

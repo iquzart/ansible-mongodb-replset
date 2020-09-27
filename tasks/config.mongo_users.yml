@@ -1,23 +1,4 @@
 ---
-- name: Mongo Config | Install PyMongo package
-  yum:
-    name: python3-pymongo
-    state: present
-  when: not mongodb_pymongo_from_pip
-
-- name: Mongo Config | Install PIP
-  yum:
-    name:
-      - python3-devel
-      - python3-pip
-  when: mongodb_pymongo_from_pip | bool
-
-- name: Mongo Config | Install PyMongo from PIP
-  pip:
-    name: pymongo
-    state: "{{ mongodb_pymongo_pip_version is defined | ternary('present', 'latest') }}"
-    version: "{{ mongodb_pymongo_pip_version | default(omit) }}"
-  when: mongodb_pymongo_from_pip | bool
 
 - name: Flush all handlers at this point
   meta: flush_handlers
@@ -27,7 +8,6 @@
     database: admin
     name: "{{ item.name }}"
     password: "{{ item.password }}"
-    #update_password: "{{ mongodb_user_update_password }}"
     roles: "{{ item.roles }}"
     login_port: "{{ mongodb_conf_port }}"
   with_items:
@@ -43,7 +23,6 @@
     database: admin
     name: "{{ item.name }}"
     password: "{{ item.password }}"
-    #update_password: "{{ mongodb_user_update_password }}"
     roles: "{{ item.roles }}"
     login_port: "{{ mongodb_conf_port }}"
   with_items:
@@ -59,7 +38,6 @@
     database: admin
     name: "{{ item.name }}"
     password: "{{ item.password }}"
-    #update_password: "{{ mongodb_user_update_password }}"
     roles: "{{ item.roles }}"
     login_port: "{{ mongodb_conf_port }}"
   with_items:

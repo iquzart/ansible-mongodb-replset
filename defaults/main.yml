@@ -1,14 +1,20 @@
 ---
 # defaults file for mongodb
 
-# Repository 
-mongodb_enable_yum_repository: true
+# MongoDB Version
 mongodb_install_version_major: 4
 mongodb_install_version_minor: 4
 mongodb_install_version_patch: "*"
+
+# CentOS
+mongodb_enable_yum_repository: true
 mongodb_install_package_lock: true
 
-# SELinux Configuration
+# Ubuntu
+mongodb_enable_apt_repository: true
+
+
+# SELinux Configuration (only on CentOS)
 configure_selinux: True
 
 # MongoDB Configuration
@@ -24,15 +30,6 @@ mongodb_conf_port: 27017
 mongodb_conf_oplogSize: 1024
 mongodb_conf_cloudmonitoring: "off"
 
-# Log rotation
-mongodb_logrotate: yes                             # Rotate mongodb logs.
-#mongodb_logrotate_options:
-#  - compress
-#  - copytruncate
-#  - daily
-#  - dateext
-#  - rotate 7
-#  - size 10M
 
 # Systemd Units
 mongodb_daemon_unitfile: /etc/systemd/system/mongod.service 
@@ -43,8 +40,7 @@ mongodb_replication_key_file: /etc/mongodb/repl.key
 mongodb_replication_set_name: rs01
 
 
-# PyMongo Configuration
-mongodb_pymongo_from_pip: true                  
+# PyMongo Configuration                 
 mongodb_pymongo_pip_version: 3.7.1
 
 # Account configuration

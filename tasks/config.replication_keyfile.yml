@@ -28,6 +28,6 @@
 - name: Mongo Replset | Set permission for {{ mongodb_replication_key_file }}
   file:
     path: "{{ mongodb_replication_key_file }}"
-    owner: mongod
-    group: mongod
+    owner: "{{ 'mongodb' if ansible_os_family == 'Debian' else 'mongod' }}"
+    group: "{{ 'mongodb' if ansible_os_family == 'Debian' else 'mongod' }}"
     mode: 0400
