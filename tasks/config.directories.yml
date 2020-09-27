@@ -11,7 +11,7 @@
     owner: root
     group: root
     mode: "0755"
-  when: stat_conf_directory.stat.exists == false
+  when: not stat_conf_directory.stat.exists
 
 - name: Mongo Config | Check if database directory {{ mongodb_conf_db_dir }}
   stat:
@@ -29,7 +29,7 @@
     group: "{{ 'mongodb' if ansible_os_family == 'Debian' else 'mongod' }}"
   when:
     - mongodb_conf_db_dir  != "/var/lib/mongo"
-    - stat_db_directory.stat.exists == false
+    - not stat_db_directory.stat.exists
 
 - name: Mongo Config | Check if database directory {{ mongodb_conf_log_dir }}
   stat:
@@ -47,4 +47,4 @@
     group: "{{ 'mongodb' if ansible_os_family == 'Debian' else 'mongod' }}"
   when:
     - mongodb_conf_log_dir  != "/var/log/mongodb"
-    - stat_log_directory.stat.exists == false
+    - not stat_log_directory.stat.exists

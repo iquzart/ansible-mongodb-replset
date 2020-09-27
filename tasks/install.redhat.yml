@@ -17,8 +17,8 @@
 - name: Install RedHat | Install MongoDB {{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }} packages
   yum:
     name:
-      - mongodb-org-{{mongodb_install_version_major}}.{{mongodb_install_version_minor}}.{{mongodb_install_version_patch}}
-      - mongodb-org-server-{{mongodb_install_version_major}}.{{mongodb_install_version_minor}}.{{mongodb_install_version_patch}}
+      - mongodb-org-{{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }}.{{ mongodb_install_version_patch }}
+      - mongodb-org-server-{{ mongodb_install_version_major }}.{{ mongodb_install_version_minor }}.{{ mongodb_install_version_patch }}
       - numactl
     state: present
 
