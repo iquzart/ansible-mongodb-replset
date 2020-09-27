@@ -3,6 +3,7 @@
   template:
     src: "{{ item }}.js.j2"
     dest: "/tmp/{{ item }}.js"
+    mode: "0755"
   loop:
     - initReplicaset
     - addMembers
