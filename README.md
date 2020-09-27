@@ -23,7 +23,7 @@ Support Matrix
 --------------
 
 | Destro | MongoDB 4.4 | MongoDB 4.3 |
-| --- | --- | --- | --- |
+| --- | --- | --- |
 | CentOS 8 | Supported (Tested) | Supported (Not Tested) |
 | CentOS 7 | Supported (Tested) | Supported (Not Tested) |
 | Ubuntu 20.04 LTS | Supported (Tested) | Supported (Not Tested) |
