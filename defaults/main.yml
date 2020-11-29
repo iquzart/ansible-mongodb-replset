@@ -33,7 +33,7 @@ mongodb_conf_cloudmonitoring: "off"
 mongodb_daemon_unitfile: /etc/systemd/system/mongod.service
 
 # Replicset configuration
-mongodb_replication_enabled: true
+mongodb_replication_enabled: false
 mongodb_replication_key_file: /etc/mongodb/repl.key
 mongodb_replication_set_name: rs01
 
